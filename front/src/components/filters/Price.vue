@@ -38,4 +38,33 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.price-filter {
+  .filter__body {
+    .vue-slider {
+      .vue-slider-process {
+        background-color: #ff4641;
+        opacity: 0.7;
+      }
+
+      &:hover .vue-slider-process {
+        opacity: 1;
+      }
+
+      .vue-slider-dot-handle {
+        border: 3px solid #ff4641;
+        opacity: 0.7;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+
+      .vue-slider-dot-handle-focus {
+        opacity: 1;
+        box-shadow: 0 0 0 5px rgb(255 70 65 / 20%);
+      }
+    }
+  }
+}
+</style>
