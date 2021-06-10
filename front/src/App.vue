@@ -1,15 +1,15 @@
 <template>
   <main>
     <div class="app__filters">
-      <template v-if="filtersVisible">
-        <Cities />
-        <Stars />
-        <Type />
-        <Price :max-price="maxPrice" />
+      <slot :key="filtersVisible">
+        <Cities/>
+        <Stars/>
+        <Type/>
+        <Price :max-price="maxPrice"/>
         <div class="app__reset">
           <a @click.prevent="resetHandler" href="#">Сбросить все фильтры</a>
         </div>
-      </template>
+      </slot>
     </div>
     <div class="app__hotels">
       <div class="container">
@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import {defineComponent} from "vue";
 
 import Hotel from "@/components/Hotel.vue";
 
@@ -38,12 +38,12 @@ import Price from "@/components/filters/Price.vue";
 import Type from "@/components/filters/Type.vue";
 
 export default defineComponent({
-  components: { Type, Price, Cities, Stars, Hotel },
+  components: {Type, Price, Cities, Stars, Hotel},
 
   data() {
     return {
       count: 6,
-      filtersVisible: true,
+      filtersVisible: 0,
     };
   },
 
@@ -51,12 +51,11 @@ export default defineComponent({
     resetHandler() {
       this.$store.dispatch("allReset");
 
-      setTimeout(() => {
-        this.filtersVisible = true;
-      }, 0);
-
-      this.filtersVisible = false;
+      this.forceRerender();
     },
+    forceRerender() {
+      this.filtersVisible += 1;
+    }
   },
 
   computed: {
@@ -73,14 +72,10 @@ export default defineComponent({
 
     request
       .then((response) => response.json())
-      .then(({ hotels }) => {
+      .then(({hotels}) => {
         this.$store.dispatch("setAll", hotels);
 
-        setTimeout(() => {
-          this.filtersVisible = true;
-        }, 0);
-
-        this.filtersVisible = false;
+        this.forceRerender();
       });
   },
 });
