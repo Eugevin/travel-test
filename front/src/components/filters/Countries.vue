@@ -2,7 +2,11 @@
   <div class="cities-filter filter">
     <div class="filter__heading">Поиск по странам и городам</div>
     <div class="filter__body">
-      <input @change="inputHandler" v-model="value" type="text" />
+      <input
+        @change="changeHandler"
+        v-model="value"
+        type="text"
+      />
       <ul class="cities-filter__list">
         <li v-for="country in countries" :key="country">
           <a @click.prevent="countryHandler" href="#">{{ country }}</a>
@@ -19,28 +23,28 @@ export default defineComponent({
   computed: {
     countries() {
       return this.$store.state.countries;
-    },
+    }
   },
 
   data() {
     return {
-      value: "",
+      value: ""
     };
   },
 
   methods: {
     countryHandler(e: any) {
-      const eTarget = e.target as HTMLElement;
-
       this.value = e.target.textContent;
 
-      this.inputHandler();
+      this.changeHandler();
     },
 
-    inputHandler() {
+    // inputHandler() {}, @input="inputHandler"
+
+    changeHandler() {
       this.$store.dispatch("setCountryFilter", this.value);
-    },
-  },
+    }
+  }
 });
 </script>
 

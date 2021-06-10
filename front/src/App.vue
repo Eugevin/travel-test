@@ -2,10 +2,10 @@
   <main>
     <div class="app__filters">
       <slot :key="filtersVisible">
-        <Cities/>
-        <Stars/>
-        <Type/>
-        <Price :max-price="maxPrice"/>
+        <Cities />
+        <Stars />
+        <Type />
+        <Price :max-price="maxPrice" />
         <div class="app__reset">
           <a @click.prevent="resetHandler" href="#">Сбросить все фильтры</a>
         </div>
@@ -20,7 +20,12 @@
         />
         <div class="app__hotels-empty">Записей не найдено</div>
         <div class="app__hotels-more">
-          <a @click.prevent="count += 6" href="#">Показать еще отели</a>
+          <a
+            v-if="$store.state.hotels.length >= count"
+            @click.prevent="count += 6"
+            href="#"
+            >Показать еще отели</a
+          >
         </div>
       </div>
     </div>
@@ -28,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import { defineComponent } from "vue";
 
 import Hotel from "@/components/Hotel.vue";
 
@@ -38,12 +43,12 @@ import Price from "@/components/filters/Price.vue";
 import Type from "@/components/filters/Type.vue";
 
 export default defineComponent({
-  components: {Type, Price, Cities, Stars, Hotel},
+  components: { Type, Price, Cities, Stars, Hotel },
 
   data() {
     return {
       count: 6,
-      filtersVisible: 0,
+      filtersVisible: 0
     };
   },
 
@@ -64,20 +69,20 @@ export default defineComponent({
     },
     maxPrice() {
       return this.$store.state.maxPrice;
-    },
+    }
   },
 
   mounted() {
     const request = fetch("http://localhost:3000/data");
 
     request
-      .then((response) => response.json())
-      .then(({hotels}) => {
+      .then(response => response.json())
+      .then(({ hotels }) => {
         this.$store.dispatch("setAll", hotels);
 
         this.forceRerender();
       });
-  },
+  }
 });
 </script>
 
